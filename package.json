@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "dev": "parcel watch src/index.js --no-source-maps -d ./",
-    "build": "parcel build src/index.js --no-source-maps --experimental-scope-hoisting -d ./"
+    "build": "parcel build src/index.js --no-source-maps --experimental-scope-hoisting -d ./",
+    "assets": "parcel build src/assets/kirby-editor-lite-youtube-embed.js src/assets/kirby-editor-lite-youtube-embed.scss --no-source-maps -d ./assets/",
+    "dist": "npm run build && npm run assets"
   },
   "repository": {
     "type": "git",
@@ -50,6 +52,7 @@
     "@vue/component-compiler-utils": "^3.2.0",
     "cssnano": "^4.1.10",
     "parcel": "^1.12.4",
+    "parcel-bundler": "^1.12.4",
     "sass": "^1.29.0",
     "vue-template-compiler": "^2.6.12"
   }

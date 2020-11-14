@@ -46,7 +46,7 @@
         </span>
         <span class="k-input-icon">
           <span aria-hidden="true" class="k-icon k-icon-video">
-            <svg viewBox="0 0 16 16">
+            <svg viewBox="0 0 16 16" xmlns:xlink="http://www.w3.org/1999/xlink">
               <use xlink:href="#icon-video"></use>
             </svg>
           </span>
