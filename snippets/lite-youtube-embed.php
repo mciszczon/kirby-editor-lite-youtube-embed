@@ -25,7 +25,7 @@
 -->
 
 <figure>
-  <lite-youtube-embed videoid="<?= $attrs->videoId() ?>"></lite-youtube-embed>
+  <lite-youtube videoid="<?= $attrs->videoId() ?>"></lite-youtube>
   <figcaption>
     <?= $attrs->caption() ?>
   </figcaption>
