@@ -1,0 +1,18 @@
+{
+    "name": "mciszczon/kirby-editor-lite-youtube-embed",
+    "description": "Kirby Editor block for lite-youtube-embed",
+    "keywords": ["kirby", "cms", "wysiwyg", "plugin", "editor", "block", "lite-youtube-embed"],
+    "homepage": "https://github.com/mciszczon/kirby-editor-lite-youtube-embed",
+    "type": "kirby-plugin",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Mateusz Ciszczoń",
+            "email": "contact@mciszczon.pl"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "php": ">=7.2.0"
+    }
+}

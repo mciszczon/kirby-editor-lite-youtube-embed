@@ -1,0 +1,59 @@
+{
+  "name": "kirby-editor-lite-youtube-embed",
+  "version": "0.1.0",
+  "description": "Kirby Editor plugin to handle lite-youtube-embed",
+  "main": "index.js",
+  "scripts": {
+    "dev": "parcel watch src/index.js --no-source-maps -d ./",
+    "build": "parcel build src/index.js --no-source-maps --experimental-scope-hoisting -d ./",
+    "assets": "parcel build src/assets/kirby-editor-lite-youtube-embed.js src/assets/kirby-editor-lite-youtube-embed.scss --no-source-maps -d ./assets/",
+    "dist": "npm run build && npm run assets"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mciszczon/kirby-editor-lite-youtube-embed.git"
+  },
+  "keywords": [
+    "kirby",
+    "kirbycms",
+    "editor",
+    "lite-youtube-embed",
+    "vue",
+    "php"
+  ],
+  "author": "Mateusz Ciszczoń <contact@mciszczon.pl>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mciszczon/kirby-editor-lite-youtube-embed/issues"
+  },
+  "homepage": "https://github.com/mciszczon/kirby-editor-lite-youtube-embed#readme",
+  "posthtml": {
+    "recognizeSelfClosing": true
+  },
+  "babel": {
+    "plugins": [
+      [
+        "@babel/plugin-transform-runtime"
+      ]
+    ]
+  },
+  "np": {
+    "yolo": true,
+    "publish": false
+  },
+  "dependencies": {
+    "lite-youtube-embed": "^0.1.2",
+    "vue": "^2.6.12",
+    "vue-hot-reload-api": "^2.3.4"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.12.3",
+    "@babel/plugin-transform-runtime": "^7.12.1",
+    "@vue/component-compiler-utils": "^3.2.0",
+    "cssnano": "^4.1.10",
+    "parcel": "^1.12.4",
+    "parcel-bundler": "^1.12.4",
+    "sass": "^1.29.0",
+    "vue-template-compiler": "^2.6.12"
+  }
+}
