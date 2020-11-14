@@ -1,6 +1,6 @@
 {
   "name": "kirby-editor-lite-youtube-embed",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Kirby Editor plugin to handle lite-youtube-embed",
   "main": "index.js",
   "scripts": {
@@ -36,10 +36,6 @@
         "@babel/plugin-transform-runtime"
       ]
     ]
-  },
-  "np": {
-    "yolo": true,
-    "publish": false
   },
   "dependencies": {
     "lite-youtube-embed": "^0.1.2",
