@@ -1,105 +1,152 @@
 <template>
-  <link rel="stylesheet" href="node_modules/lite-youtube-embed/src/lite-yt-embed.css" type="text/css"/>
-  <lite-youtube videoid="{{ videoId }}"></lite-youtube>
+  <figure>
+    <template v-if="attrs.videoId">
+      <div
+          ref="element"
+          tabindex="0"
+          @keydown.backspace="$emit('remove')"
+          @keydown.delete="$emit('remove')"
+          @keydown.enter.prevent="$emit('append')"
+          @keydown.up="$emit('prev')"
+          @keydown.down="$emit('next')"
+      >
+        <lite-youtube :videoid="attrs.videoId"></lite-youtube>
+      </div>
+      <figcaption class="k-editor-lite-youtube-embed-caption">
+        <k-editable
+            :content="attrs.caption"
+            :breaks="true"
+            :placeholder="$t('editor.blocks.lite-youtube-embed.caption.placeholder') + '…'"
+            @prev="focus"
+            @shiftTab="focus"
+            @tab="$emit('next', $event)"
+            @next="$emit('next', $event)"
+            @split="$emit('append')"
+            @enter="$emit('append')"
+            @input="caption"
+        />
+      </figcaption>
+      <k-dialog ref="settings" @submit="$refs.settings.close()" size="medium">
+        <k-form :fields="fields" v-model="attrs" @submit="$refs.settings.close()"/>
+      </k-dialog>
+    </template>
+    <template v-else>
+      <div data-theme="field" data-type="text" class="k-input">
+        <span class="k-input-element">
+          <input
+              class="k-text-input"
+              ref="element"
+              type="text"
+              :placeholder="$t('editor.blocks.lite-youtube-embed.placeholder') + '…'"
+              v-model="attrs.videoId"
+              @keydown.up="$emit('prev')"
+              @keydown.down="$emit('next')"
+              @keydown.enter.prevent="$emit('append')"
+          >
+        </span>
+        <span class="k-input-icon">
+          <span aria-hidden="true" class="k-icon k-icon-video">
+            <svg viewBox="0 0 16 16">
+              <use xlink:href="#icon-video"></use>
+            </svg>
+          </span>
+        </span>
+      </div>
+    </template>
+  </figure>
 </template>
 
 <script>
 import LiteYouTubeEmbed from 'lite-youtube-embed'
+import styles from 'lite-youtube-embed/src/lite-yt-embed.css'
 
 export default {
   label: 'Lite YouTube Embed',
   icon: 'video',
   props: {
-    videoId: String,
-    attrs: [Array, Object]
+    attrs: {
+      type: Object,
+      default () {
+        return {
+          videoId: null
+        }
+      }
+    },
   },
-  data () {
-    return {
-      videoId: this.videoId,
+  computed: {
+    fields () {
+      return {
+        videoId: {
+          label: this.$t('editor.blocks.lite-youtube-embed.videoId.label'),
+          type: 'text',
+          icon: 'video',
+          placeholder: this.$t('editor.blocks.lite-youtube-embed.placeholder')
+        },
+      }
     }
   },
   methods: {
-    // the block must be focusable somehow
-    // use tabindex=0 on a wrapping element
-    // if there's no real input. The focus event
-    // recieves a cursor position that should be
-    // focused if possible. This is just a suggestion
-    // from the editor to enhance keyboard navigation
-    focus(cursor) {
-      // the content editable component can be focused
-      // with a specific cursor position, so we can
-      // pass it further down
-      this.$refs.input.focus(cursor);
+    focus () {
+      this.$refs.element.focus()
     },
-    // when delete is being pressed in the editable
-    // and the cursor is at the first position a "back"
-    // event is fired, which can be used to delete the entire block,
-    // when it is empty or to merge it with the previous block.
-    // we can pass the back event to the editor to take care of this.
-    onBack(event) {
-      this.$emit("back", event);
-    },
-    // send the state of the todo as attribute
-    onCheck() {
-      this.$emit("input", {
+    caption (html) {
+      this.$emit('input', {
         attrs: {
-          done: !this.attrs.done
+          ...this.attrs,
+          caption: html
         }
-      });
+      })
     },
-    // enter is only fired in the editable component
-    // when the cursor is at the end of the text. Otherwise
-    // a split event will be fired. The enter event can
-    // thus be used to either append a new block or in this case
-    // convert a todo to a simple paragraph when the todo is empty
-    // this is the same behavior as in list elements
-    onEnter() {
-      if (this.content.length === 0) {
-        this.$emit("convert", "paragraph");
+    menu () {
+      if (this.attrs.videoId) {
+        return [
+          {
+            icon: 'open',
+            label: this.$t('editor.blocks.lite-youtube-embed.open'),
+            click: this.open
+          },
+          {
+            icon: 'video',
+            label: this.$t('editor.blocks.lite-youtube-embed.settings'),
+            click: this.$refs.settings.open
+          },
+        ]
       } else {
-        this.$emit("append", {
-          type: "todo"
-        });
+        return []
       }
+
     },
-    // whenever the text changes in the editable component
-    // we send an input event to the editor and pass the html
-    // of the editable component as content
-    onInput(html) {
-      this.$emit("input", {
-        content: html
-      });
+    open () {
+      window.open('https://youtube.com/watch?v=' + this.attrs.videoId, '_blank')
     },
-    // the editable component sends a next event when
-    // the last line is reached and the down arrow is pressed.
-    // we can pass this to the editor to focus on
-    // the next block
-    onNext(cursor) {
-      this.$emit("next", cursor);
-    },
-    // the editable component sends a prev event when
-    // the first line is reached and the up arrow is pressed.
-    // we can pass this to the editor to focus on
-    // the previous block
-    onPrev(cursor) {
-      this.$emit("prev", cursor);
-    },
-    // when enter is pressed in the middle of the text
-    // a split event is fired that recieves an object with
-    // content "before" and "after" the cursor. This can be
-    // forwarded to the editor, which will then create two
-    // blocks out of the one
-    onSplit(data) {
-      this.$emit("split", data);
+    replace () {
+      this.$emit('input', {
+        attrs: { videoId: null }
+      })
+
+      this.$nextTick(() => {
+        this.focus()
+      })
     }
   }
 }
 </script>
 
-<style>
-@import './../../node_modules/lite-youtube-embed/src/lite-yt-embed.css';
+<style lang="scss">
+@import "../variables.scss";
 
 .k-editor-lite-youtube-embed-block {
+  margin: 16px 0;
+}
 
+.k-editor-lite-youtube-embed-input {
+  width: 100%;
+}
+
+.k-editor-lite-youtube-embed-caption {
+  margin-top: 16px;
+  font-family: $font-family-sans;
+  font-size: $font-size-small;
+  text-align: center;
 }
 </style>
